@@ -7,6 +7,7 @@ package test
 import (
 	fmt "fmt"
 	slog "log/slog"
+	strconv "strconv"
 )
 
 func (x *Types) LogValue() slog.Value {
@@ -16,7 +17,9 @@ func (x *Types) LogValue() slog.Value {
 	attrs := make([]slog.Attr, 0, 40)
 	attrs = append(attrs, slog.String("secret_val", "[REDACTED]"))
 	attrs = append(attrs, slog.Float64("double_val", x.DoubleVal))
-	attrs = append(attrs, slog.Float64("float_val", float64(x.FloatVal)))
+	__fmt_float_val := strconv.FormatFloat(float64(x.FloatVal), 'f', -1, 32)
+	__float_val, _ := strconv.ParseFloat(__fmt_float_val, 64)
+	attrs = append(attrs, slog.Float64("float_val", __float_val))
 	attrs = append(attrs, slog.Int64("int32_val", int64(x.Int32Val)))
 	attrs = append(attrs, slog.Int64("int64_val", x.Int64Val))
 	attrs = append(attrs, slog.Uint64("uint32_val", uint64(x.Uint32Val)))

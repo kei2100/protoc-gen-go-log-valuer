@@ -89,7 +89,7 @@ func TestTypes_LogValue(t *testing.T) {
 	want := []slog.Attr{
 		{Key: "secret_val", Value: slog.StringValue("[REDACTED]")},
 		{Key: "double_val", Value: slog.Float64Value(0.1)},
-		{Key: "float_val", Value: slog.Float64Value(float64(float32(0.1)))},
+		{Key: "float_val", Value: slog.Float64Value(0.1)},
 		{Key: "int32_val", Value: slog.Int64Value(1)},
 		{Key: "int64_val", Value: slog.Int64Value(1)},
 		{Key: "uint32_val", Value: slog.Uint64Value(1)},

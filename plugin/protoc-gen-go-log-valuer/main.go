@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	fmtPkg  = protogen.GoImportPath("fmt")
-	slogPkg = protogen.GoImportPath("log/slog")
+	fmtPkg     = protogen.GoImportPath("fmt")
+	slogPkg    = protogen.GoImportPath("log/slog")
+	strconvPkg = protogen.GoImportPath("strconv")
 )
 
 func main() {
@@ -114,6 +115,7 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 	// }
 	// attrs = append(attrs, slog.Group("list_name", sub_attrs...))
 	// ```
+	fname := f.Desc.Name()
 	attrs := fmt.Sprintf("attrs%d", f.Desc.Index())
 	g.P(attrs, " := make([]interface{}, 0, len(x.", f.GoName, "))")
 	g.P("for i, v := range x.", f.GoName, " {")
@@ -131,7 +133,9 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 	case protoreflect.Fixed64Kind, protoreflect.Uint64Kind:
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Uint64(`)), fmtPkg.Ident("Sprintf"), `("%d", i), v))`)
 	case protoreflect.FloatKind:
-		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Float64(`)), fmtPkg.Ident("Sprintf"), `("%d", i), float64(v)))`)
+		g.P("__fmt_", fname, " := ", g.QualifiedGoIdent(strconvPkg.Ident("FormatFloat(float64(v), 'f', -1, 32)")))
+		g.P("__", fname, ", _ := ", g.QualifiedGoIdent(strconvPkg.Ident("ParseFloat(")), "__fmt_", fname, ", 64)")
+		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Float64(`)), fmtPkg.Ident("Sprintf"), `("%d", i), float64(__`, fname, `)))`)
 	case protoreflect.Int32Kind, protoreflect.Sfixed32Kind, protoreflect.Sint32Kind:
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Int64(`)), fmtPkg.Ident("Sprintf"), `("%d", i), int64(v)))`)
 	case protoreflect.Int64Kind, protoreflect.Sfixed64Kind, protoreflect.Sint64Kind:
@@ -141,7 +145,6 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 	case protoreflect.MessageKind:
 		g.P("if v, ok := interface{}(v).(", g.QualifiedGoIdent(slogPkg.Ident("LogValuer")), "); ok {")
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Attr{Key: `)), fmtPkg.Ident("Sprintf"), `("%d", i), Value: v.LogValue()})`)
-		//g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Attr{Key: "`)), fname, `", Value: v.LogValue()})`)
 		g.P("} else {")
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Any(`)), fmtPkg.Ident("Sprintf"), `("%d", i), v))`)
 		g.P("}")
@@ -151,11 +154,11 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Any(`)), fmtPkg.Ident("Sprintf"), `("%d", i), v))`)
 	}
 	g.P("}")
-	fname := f.Desc.Name()
 	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Group("`)), fname, `", `, attrs, "...))")
 }
 
 func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {
+	fname := f.Desc.Name()
 	attrs := fmt.Sprintf("attrs%d", f.Desc.Index())
 	g.P(attrs, " := make([]interface{}, 0, len(x.", f.GoName, "))")
 	g.P("for k, v := range x.", f.GoName, " {")
@@ -173,7 +176,9 @@ func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {
 	case protoreflect.Fixed64Kind, protoreflect.Uint64Kind:
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Uint64(`)), fmtPkg.Ident("Sprintf"), `("%v", k), v))`)
 	case protoreflect.FloatKind:
-		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Float64(`)), fmtPkg.Ident("Sprintf"), `("%v", k), float64(v)))`)
+		g.P("__fmt_", fname, " := ", g.QualifiedGoIdent(strconvPkg.Ident("FormatFloat(float64(v), 'f', -1, 32)")))
+		g.P("__", fname, ", _ := ", g.QualifiedGoIdent(strconvPkg.Ident("ParseFloat(")), "__fmt_", fname, ", 64)")
+		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Float64(`)), fmtPkg.Ident("Sprintf"), `("%v", k), float64(__`, fname, `)))`)
 	case protoreflect.Int32Kind, protoreflect.Sfixed32Kind, protoreflect.Sint32Kind:
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Int64(`)), fmtPkg.Ident("Sprintf"), `("%v", k), int64(v)))`)
 	case protoreflect.Int64Kind, protoreflect.Sfixed64Kind, protoreflect.Sint64Kind:
@@ -183,7 +188,6 @@ func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {
 	case protoreflect.MessageKind:
 		g.P("if v, ok := interface{}(v).(", g.QualifiedGoIdent(slogPkg.Ident("LogValuer")), "); ok {")
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Attr{Key: `)), fmtPkg.Ident("Sprintf"), `("%v", k), Value: v.LogValue()})`)
-		//g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Attr{Key: "`)), fname, `", Value: v.LogValue()})`)
 		g.P("} else {")
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Any(`)), fmtPkg.Ident("Sprintf"), `("%v", k), v))`)
 		g.P("}")
@@ -193,7 +197,6 @@ func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Any(`)), fmtPkg.Ident("Sprintf"), `("%v", k), v))`)
 	}
 	g.P("}")
-	fname := f.Desc.Name()
 	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Group("`)), fname, `", `, attrs, "...))")
 }
 
@@ -219,7 +222,9 @@ func generatePrimitiveField(g *protogen.GeneratedFile, f *protogen.Field) {
 	case protoreflect.Fixed64Kind, protoreflect.Uint64Kind:
 		g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Uint64("`)), fname, `", x.`, gname, "))")
 	case protoreflect.FloatKind:
-		g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Float64("`)), fname, `", float64(x.`, gname, ")))")
+		g.P("__fmt_", fname, " := ", g.QualifiedGoIdent(strconvPkg.Ident("FormatFloat(float64(x.")), gname, "), 'f', -1, 32)")
+		g.P("__", fname, ", _ := ", g.QualifiedGoIdent(strconvPkg.Ident("ParseFloat(")), "__fmt_", fname, ", 64)")
+		g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Float64("`)), fname, `", __`, fname, "))")
 	case protoreflect.Int32Kind, protoreflect.Sfixed32Kind, protoreflect.Sint32Kind:
 		g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Int64("`)), fname, `", int64(x.`, gname, ")))")
 	case protoreflect.Int64Kind, protoreflect.Sfixed64Kind, protoreflect.Sint64Kind:
