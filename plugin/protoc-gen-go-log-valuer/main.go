@@ -98,26 +98,20 @@ func handleExplicitPresence(g *protogen.GeneratedFile, f *protogen.Field, genera
 
 func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 	// NOTE:
-	// 以下のような形式にしたいが、slog パッケージにそのような API はないので
+	// slog パッケージには slog.LogValuer の slice を slog.Value として扱う API がなさそう。
 	// ```
-	// attrs = append(attrs, slog.LogValuers("list_name", list_values))
+	// attrs = append(attrs, slog.LogValuers("list_name", list_values)) // このような API は無い
 	// ```
-	//
-	// 仕方なく以下のような形式にしている。
+	// そのため、ここでは slice ではなく slice のインデックスをキーとする map のような形式で出力を行っている
 	// ```
-	// sub_attrs := make([]interface{}, 0, len(list_values)
-	// for i, v := range list_values {
-	//     if v, ok := interface{}(v).(slog.LogValuer); ok {
-	//         sub_attrs = append(sub_attrs, slog.Attr{Key: fmt.Sprintf("%d", i), Value: v.LogValue()})
-	//     } else {
-	//         sub_attrs = append(sub_attrs, slog.Any(fmt.Sprintf("%d", i), v))
-	//     }
-	// }
-	// attrs = append(attrs, slog.Group("list_name", sub_attrs...))
-	// ```
+	// len(x.FieldName) == 0
 	fname := f.Desc.Name()
+	g.P("if len(x.", f.GoName, ") == 0 {")
+	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Any("`)), fname, `", make(map[string]string, 0)))`)
+	g.P("} else {")
+	// len(x.FieldName) > 0
 	attrs := fmt.Sprintf("attrs%d", f.Desc.Index())
-	g.P(attrs, " := make([]interface{}, 0, len(x.", f.GoName, "))")
+	g.P(attrs, " := make([]", g.QualifiedGoIdent(slogPkg.Ident("Attr")), ", 0, len(x.", f.GoName, "))")
 	g.P("for i, v := range x.", f.GoName, " {")
 	switch f.Desc.Kind() {
 	case protoreflect.BoolKind:
@@ -154,7 +148,8 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 		g.P(attrs, " = append(", attrs, ", ", g.QualifiedGoIdent(slogPkg.Ident(`Any(`)), fmtPkg.Ident("Sprintf"), `("%d", i), v))`)
 	}
 	g.P("}")
-	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Group("`)), fname, `", `, attrs, "...))")
+	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Any("`)), fname, `", `, attrs, "))")
+	g.P("}")
 }
 
 func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {

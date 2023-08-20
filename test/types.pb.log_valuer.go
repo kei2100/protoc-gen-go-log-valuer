@@ -95,30 +95,46 @@ func (x *Types) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("map_empty_val", attrs25))
 	}
-	attrs26 := make([]interface{}, 0, len(x.RepeatedVal1))
-	for i, v := range x.RepeatedVal1 {
-		attrs26 = append(attrs26, slog.String(fmt.Sprintf("%d", i), v))
-	}
-	attrs = append(attrs, slog.Group("repeated_val1", attrs26...))
-	attrs27 := make([]interface{}, 0, len(x.RepeatedVal2))
-	for i, v := range x.RepeatedVal2 {
-		attrs27 = append(attrs27, slog.String(fmt.Sprintf("%d", i), v.String()))
-	}
-	attrs = append(attrs, slog.Group("repeated_val2", attrs27...))
-	attrs28 := make([]interface{}, 0, len(x.RepeatedVal3))
-	for i, v := range x.RepeatedVal3 {
-		if v, ok := interface{}(v).(slog.LogValuer); ok {
-			attrs28 = append(attrs28, slog.Attr{Key: fmt.Sprintf("%d", i), Value: v.LogValue()})
-		} else {
-			attrs28 = append(attrs28, slog.Any(fmt.Sprintf("%d", i), v))
+	if len(x.RepeatedVal1) == 0 {
+		attrs = append(attrs, slog.Any("repeated_val1", make(map[string]string, 0)))
+	} else {
+		attrs26 := make([]slog.Attr, 0, len(x.RepeatedVal1))
+		for i, v := range x.RepeatedVal1 {
+			attrs26 = append(attrs26, slog.String(fmt.Sprintf("%d", i), v))
 		}
+		attrs = append(attrs, slog.Any("repeated_val1", attrs26))
 	}
-	attrs = append(attrs, slog.Group("repeated_val3", attrs28...))
-	attrs29 := make([]interface{}, 0, len(x.RepeatedEmptyVal))
-	for i, v := range x.RepeatedEmptyVal {
-		attrs29 = append(attrs29, slog.String(fmt.Sprintf("%d", i), v))
+	if len(x.RepeatedVal2) == 0 {
+		attrs = append(attrs, slog.Any("repeated_val2", make(map[string]string, 0)))
+	} else {
+		attrs27 := make([]slog.Attr, 0, len(x.RepeatedVal2))
+		for i, v := range x.RepeatedVal2 {
+			attrs27 = append(attrs27, slog.String(fmt.Sprintf("%d", i), v.String()))
+		}
+		attrs = append(attrs, slog.Any("repeated_val2", attrs27))
 	}
-	attrs = append(attrs, slog.Group("repeated_empty_val", attrs29...))
+	if len(x.RepeatedVal3) == 0 {
+		attrs = append(attrs, slog.Any("repeated_val3", make(map[string]string, 0)))
+	} else {
+		attrs28 := make([]slog.Attr, 0, len(x.RepeatedVal3))
+		for i, v := range x.RepeatedVal3 {
+			if v, ok := interface{}(v).(slog.LogValuer); ok {
+				attrs28 = append(attrs28, slog.Attr{Key: fmt.Sprintf("%d", i), Value: v.LogValue()})
+			} else {
+				attrs28 = append(attrs28, slog.Any(fmt.Sprintf("%d", i), v))
+			}
+		}
+		attrs = append(attrs, slog.Any("repeated_val3", attrs28))
+	}
+	if len(x.RepeatedEmptyVal) == 0 {
+		attrs = append(attrs, slog.Any("repeated_empty_val", make(map[string]string, 0)))
+	} else {
+		attrs29 := make([]slog.Attr, 0, len(x.RepeatedEmptyVal))
+		for i, v := range x.RepeatedEmptyVal {
+			attrs29 = append(attrs29, slog.String(fmt.Sprintf("%d", i), v))
+		}
+		attrs = append(attrs, slog.Any("repeated_empty_val", attrs29))
+	}
 	if x.StructVal != nil {
 		if v, ok := interface{}(x.StructVal).(slog.LogValuer); ok {
 			attrs = append(attrs, slog.Attr{Key: "struct_val", Value: v.LogValue()})
