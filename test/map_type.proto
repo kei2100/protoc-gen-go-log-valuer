@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package simple;
+option go_package = "github.com/kei2100/protoc-gen-go-log-valuer/test";
+
+import "google/protobuf/struct.proto";
+
+message MapType {
+  map<string, string> string_map = 1;
+  map<string, float> float_map = 2;
+  map<int32, string> int_key_map = 3;
+
+  map<string, MapMessage> message_map = 4;
+  map<string, google.protobuf.Struct> struct_map = 5;
+
+  map<string, string> empty_string_map = 6;
+  map<string, MapMessage> empty_message_map = 7;
+
+  map<string, string> null_string_map = 8;
+  map<string, MapMessage> null_message_map = 9;
+
+  message MapMessage {
+    string secret_val = 1 [debug_redact = true];
+    double double_val = 2;
+    float float_val = 3;
+  }
+}
