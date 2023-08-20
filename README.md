@@ -1,6 +1,6 @@
 # protoc-gen-go-log-valuer
 
-protoc-gen-go-log-valuer is a protoc plugin for implementing the [slog.LogValuer](https://pkg.go.dev/log/slog@go1.21.0rc2#LogValuer) interface on proto messages.
+protoc-gen-go-log-valuer is a protoc plugin for implementing the [slog.LogValuer](https://pkg.go.dev/log/slog@go1.21.0#LogValuer) interface on proto messages.
 
 ## Requirements
 
