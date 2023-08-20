@@ -14,7 +14,7 @@ test: test.proto
 
 .PHONY: bench
 bench: test.proto
-	$(GO) test -bench . ./... -benchmem
+	$(GO) test -bench . ./... -run Benchmark -benchmem
 
 .PHONY: test.proto
 test.proto: test/bin/protoc-gen-go-log-valuer
