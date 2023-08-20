@@ -6,16 +6,16 @@ import (
 	"testing"
 )
 
-// $ go1.21rc2 test -bench . -benchmem
-//  goos: darwin
-//  goarch: amd64
-//  pkg: github.com/kei2100/protoc-gen-go-log-valuer/test
-//  cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
-//
-// BenchmarkTypes_LogValue-16                276386              4198 ns/op            1801 B/op          2 allocs/op
-// BenchmarkTypes_NotUse_LogValue-16          61465             19485 ns/op            2291 B/op         76 allocs/op
-// BenchmarkTypes_Manually-16                398064              2946 ns/op             600 B/op          2 allocs/op
-//
+// $ make bench
+// goos: darwin
+// goarch: amd64
+// pkg: github.com/kei2100/protoc-gen-go-log-valuer/test
+// cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+// BenchmarkTypes_LogValue-16                182263              6357 ns/op            1850 B/op         11 allocs/op
+// BenchmarkTypes_NotUse_LogValue-16          61605             19753 ns/op            2291 B/op         76 allocs/op
+// BenchmarkTypes_Manually-16                378253              3140 ns/op             600 B/op          2 allocs/op
+// PASS
+// ok      github.com/kei2100/protoc-gen-go-log-valuer/test        4.042s
 
 func BenchmarkTypes_LogValue(b *testing.B) {
 	m := &Types{

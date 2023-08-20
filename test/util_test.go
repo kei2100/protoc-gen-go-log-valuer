@@ -13,6 +13,7 @@ import (
 )
 
 // TODO map, list, message, explicit presence
+// TODO bench
 
 func testJSON(t *testing.T, v slog.LogValuer, wantJSON string) {
 	t.Helper()

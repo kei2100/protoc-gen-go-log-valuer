@@ -15,7 +15,7 @@ func (x *ListType) LogValue() slog.Value {
 	}
 	attrs := make([]slog.Attr, 0, 1)
 	if len(x.StringList) == 0 {
-		attrs = append(attrs, slog.Any("string_list", make(map[string]string, 0)))
+		attrs = append(attrs, slog.Any("string_list", struct{}{}))
 	} else {
 		attrs0 := make([]slog.Attr, 0, len(x.StringList))
 		for i, v := range x.StringList {
