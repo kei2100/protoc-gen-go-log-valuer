@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package simple;
+option go_package = "github.com/kei2100/protoc-gen-go-log-valuer/test";
+
+message ListType {
+  repeated string string_list = 1;
+}

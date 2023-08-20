@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package simple;
+option go_package = "github.com/kei2100/protoc-gen-go-log-valuer/test";
+
+message ScalarType {
+  string secret_val = 1 [debug_redact = true];
+
+  // Scalar Value Types
+  // https://developers.google.com/protocol-buffers/docs/proto#scalar
+  double double_val = 2;
+  float float_val = 3;
+  int32 int32_val = 4;
+  int64 int64_val = 5;
+  uint32 uint32_val = 6;
+  uint64 uint64_val = 7;
+  sint32 sint32_val = 8;
+  sint64 sint64_val = 9;
+  fixed32 fixed32_val = 10;
+  fixed64 fixed64_val = 11;
+  sfixed32 sfixed32_val = 12;
+  sfixed64 sfixed64_val = 13;
+  bool bool_val = 14;
+  string string_val = 15;
+  bytes bytes_val = 16;
+
+  // Enumerations
+  // https://developers.google.com/protocol-buffers/docs/proto#enum
+  enum Enum {
+    ENUM_0 = 0;
+    ENUM_1 = 1;
+    ENUM_2 = 2;
+  }
+  Enum enum_val = 17;
+
+  // Oneof
+  // https://developers.google.com/protocol-buffers/docs/proto#oneof
+  oneof oneof_val {
+    string oneof_string_val = 18;
+    int64 oneof_int64_val = 19;
+    bool oneof_bool_val = 20;
+  }
+
+  // Camelcasing
+  string _String = 21;
+}
+
