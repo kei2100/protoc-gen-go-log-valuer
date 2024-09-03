@@ -15,18 +15,14 @@ func (x *MapType) LogValue() slog.Value {
 		return slog.AnyValue(nil)
 	}
 	attrs := make([]slog.Attr, 0, 9)
-	if len(x.StringMap) == 0 {
-		attrs = append(attrs, slog.Any("string_map", struct{}{}))
-	} else {
+	if len(x.StringMap) != 0 {
 		attrs0 := make([]slog.Attr, 0, len(x.StringMap))
 		for k, v := range x.StringMap {
 			attrs0 = append(attrs0, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("string_map", attrs0))
 	}
-	if len(x.FloatMap) == 0 {
-		attrs = append(attrs, slog.Any("float_map", struct{}{}))
-	} else {
+	if len(x.FloatMap) != 0 {
 		attrs1 := make([]slog.Attr, 0, len(x.FloatMap))
 		for k, v := range x.FloatMap {
 			_fmt_float_map := strconv.FormatFloat(float64(v), 'f', -1, 32)
@@ -35,18 +31,14 @@ func (x *MapType) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("float_map", attrs1))
 	}
-	if len(x.IntKeyMap) == 0 {
-		attrs = append(attrs, slog.Any("int_key_map", struct{}{}))
-	} else {
+	if len(x.IntKeyMap) != 0 {
 		attrs2 := make([]slog.Attr, 0, len(x.IntKeyMap))
 		for k, v := range x.IntKeyMap {
 			attrs2 = append(attrs2, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("int_key_map", attrs2))
 	}
-	if len(x.MessageMap) == 0 {
-		attrs = append(attrs, slog.Any("message_map", struct{}{}))
-	} else {
+	if len(x.MessageMap) != 0 {
 		attrs3 := make([]slog.Attr, 0, len(x.MessageMap))
 		for k, v := range x.MessageMap {
 			if vv, ok := interface{}(v).(slog.LogValuer); ok {
@@ -57,9 +49,7 @@ func (x *MapType) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("message_map", attrs3))
 	}
-	if len(x.StructMap) == 0 {
-		attrs = append(attrs, slog.Any("struct_map", struct{}{}))
-	} else {
+	if len(x.StructMap) != 0 {
 		attrs4 := make([]slog.Attr, 0, len(x.StructMap))
 		for k, v := range x.StructMap {
 			if vv, ok := interface{}(v).(slog.LogValuer); ok {
@@ -70,18 +60,14 @@ func (x *MapType) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("struct_map", attrs4))
 	}
-	if len(x.EmptyStringMap) == 0 {
-		attrs = append(attrs, slog.Any("empty_string_map", struct{}{}))
-	} else {
+	if len(x.EmptyStringMap) != 0 {
 		attrs5 := make([]slog.Attr, 0, len(x.EmptyStringMap))
 		for k, v := range x.EmptyStringMap {
 			attrs5 = append(attrs5, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("empty_string_map", attrs5))
 	}
-	if len(x.EmptyMessageMap) == 0 {
-		attrs = append(attrs, slog.Any("empty_message_map", struct{}{}))
-	} else {
+	if len(x.EmptyMessageMap) != 0 {
 		attrs6 := make([]slog.Attr, 0, len(x.EmptyMessageMap))
 		for k, v := range x.EmptyMessageMap {
 			if vv, ok := interface{}(v).(slog.LogValuer); ok {
@@ -92,18 +78,14 @@ func (x *MapType) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("empty_message_map", attrs6))
 	}
-	if len(x.NullStringMap) == 0 {
-		attrs = append(attrs, slog.Any("null_string_map", struct{}{}))
-	} else {
+	if len(x.NullStringMap) != 0 {
 		attrs7 := make([]slog.Attr, 0, len(x.NullStringMap))
 		for k, v := range x.NullStringMap {
 			attrs7 = append(attrs7, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("null_string_map", attrs7))
 	}
-	if len(x.NullMessageMap) == 0 {
-		attrs = append(attrs, slog.Any("null_message_map", struct{}{}))
-	} else {
+	if len(x.NullMessageMap) != 0 {
 		attrs8 := make([]slog.Attr, 0, len(x.NullMessageMap))
 		for k, v := range x.NullMessageMap {
 			if vv, ok := interface{}(v).(slog.LogValuer); ok {

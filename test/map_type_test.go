@@ -68,11 +68,7 @@ func TestMapType_LogValue(t *testing.T) {
 			"struct_number": 0.1,
 			"struct_bool": true
 		}
-	},
-	"empty_string_map": {},
-	"empty_message_map": {},
-	"null_string_map": {},
-	"null_message_map": {}
+	}
 }`
 	testJSON(t, m, want)
 }
