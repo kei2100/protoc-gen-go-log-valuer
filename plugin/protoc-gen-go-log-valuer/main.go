@@ -106,9 +106,7 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 	// ```
 	// len(x.FieldName) == 0
 	fname := f.Desc.Name()
-	g.P("if len(x.", f.GoName, ") == 0 {")
-	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Any("`)), fname, `", struct{}{}))`)
-	g.P("} else {")
+	g.P("if len(x.", f.GoName, ") != 0 {")
 	// len(x.FieldName) > 0
 	attrs := fmt.Sprintf("attrs%d", f.Desc.Index())
 	g.P(attrs, " := make([]", g.QualifiedGoIdent(slogPkg.Ident("Attr")), ", 0, len(x.", f.GoName, "))")
@@ -155,9 +153,7 @@ func generateListField(g *protogen.GeneratedFile, f *protogen.Field) {
 func generateMapField(g *protogen.GeneratedFile, f *protogen.Field) {
 	// len(x.FieldName) == 0
 	fname := f.Desc.Name()
-	g.P("if len(x.", f.GoName, ") == 0 {")
-	g.P("attrs = append(attrs, ", g.QualifiedGoIdent(slogPkg.Ident(`Any("`)), fname, `", struct{}{}))`)
-	g.P("} else {")
+	g.P("if len(x.", f.GoName, ") != 0 {")
 	// len(x.FieldName) > 0
 	attrs := fmt.Sprintf("attrs%d", f.Desc.Index())
 	g.P(attrs, " := make([]", g.QualifiedGoIdent(slogPkg.Ident("Attr")), ", 0, len(x.", f.GoName, "))")

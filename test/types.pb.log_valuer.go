@@ -64,18 +64,14 @@ func (x *Types) LogValue() slog.Value {
 	if _, ok := x.GetOneofVal().(*Types_OneofBoolVal); ok {
 		attrs = append(attrs, slog.Bool("oneof_bool_val", x.GetOneofBoolVal()))
 	}
-	if len(x.MapVal1) == 0 {
-		attrs = append(attrs, slog.Any("map_val1", struct{}{}))
-	} else {
+	if len(x.MapVal1) != 0 {
 		attrs23 := make([]slog.Attr, 0, len(x.MapVal1))
 		for k, v := range x.MapVal1 {
 			attrs23 = append(attrs23, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("map_val1", attrs23))
 	}
-	if len(x.MapVal2) == 0 {
-		attrs = append(attrs, slog.Any("map_val2", struct{}{}))
-	} else {
+	if len(x.MapVal2) != 0 {
 		attrs24 := make([]slog.Attr, 0, len(x.MapVal2))
 		for k, v := range x.MapVal2 {
 			if vv, ok := interface{}(v).(slog.LogValuer); ok {
@@ -86,36 +82,28 @@ func (x *Types) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("map_val2", attrs24))
 	}
-	if len(x.MapEmptyVal) == 0 {
-		attrs = append(attrs, slog.Any("map_empty_val", struct{}{}))
-	} else {
+	if len(x.MapEmptyVal) != 0 {
 		attrs25 := make([]slog.Attr, 0, len(x.MapEmptyVal))
 		for k, v := range x.MapEmptyVal {
 			attrs25 = append(attrs25, slog.String(fmt.Sprintf("%v", k), v))
 		}
 		attrs = append(attrs, slog.Any("map_empty_val", attrs25))
 	}
-	if len(x.RepeatedVal1) == 0 {
-		attrs = append(attrs, slog.Any("repeated_val1", struct{}{}))
-	} else {
+	if len(x.RepeatedVal1) != 0 {
 		attrs26 := make([]slog.Attr, 0, len(x.RepeatedVal1))
 		for i, v := range x.RepeatedVal1 {
 			attrs26 = append(attrs26, slog.String(fmt.Sprintf("%d", i), v))
 		}
 		attrs = append(attrs, slog.Any("repeated_val1", attrs26))
 	}
-	if len(x.RepeatedVal2) == 0 {
-		attrs = append(attrs, slog.Any("repeated_val2", struct{}{}))
-	} else {
+	if len(x.RepeatedVal2) != 0 {
 		attrs27 := make([]slog.Attr, 0, len(x.RepeatedVal2))
 		for i, v := range x.RepeatedVal2 {
 			attrs27 = append(attrs27, slog.String(fmt.Sprintf("%d", i), v.String()))
 		}
 		attrs = append(attrs, slog.Any("repeated_val2", attrs27))
 	}
-	if len(x.RepeatedVal3) == 0 {
-		attrs = append(attrs, slog.Any("repeated_val3", struct{}{}))
-	} else {
+	if len(x.RepeatedVal3) != 0 {
 		attrs28 := make([]slog.Attr, 0, len(x.RepeatedVal3))
 		for i, v := range x.RepeatedVal3 {
 			if v, ok := interface{}(v).(slog.LogValuer); ok {
@@ -126,9 +114,7 @@ func (x *Types) LogValue() slog.Value {
 		}
 		attrs = append(attrs, slog.Any("repeated_val3", attrs28))
 	}
-	if len(x.RepeatedEmptyVal) == 0 {
-		attrs = append(attrs, slog.Any("repeated_empty_val", struct{}{}))
-	} else {
+	if len(x.RepeatedEmptyVal) != 0 {
 		attrs29 := make([]slog.Attr, 0, len(x.RepeatedEmptyVal))
 		for i, v := range x.RepeatedEmptyVal {
 			attrs29 = append(attrs29, slog.String(fmt.Sprintf("%d", i), v))

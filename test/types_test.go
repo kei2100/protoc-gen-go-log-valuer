@@ -126,7 +126,6 @@ func TestTypes_LogValue(t *testing.T) {
 				slog.String("other_secret_val", "[REDACTED]"),
 			),
 		)},
-		{Key: "map_empty_val", Value: slog.AnyValue(struct{}{})},
 		{Key: "repeated_val1", Value: slog.GroupValue(
 			slog.String("0", "foo"),
 			slog.String("1", "bar"),
@@ -141,7 +140,6 @@ func TestTypes_LogValue(t *testing.T) {
 				slog.String("other_secret_val", "[REDACTED]"),
 			),
 		)},
-		{Key: "repeated_empty_val", Value: slog.AnyValue(struct{}{})},
 		{Key: "struct_val", Value: slog.AnyValue(&structpb.Struct{
 			Fields: map[string]*structpb.Value{
 				"struct_string": {
